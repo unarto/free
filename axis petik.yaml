@@ -1,0 +1,103 @@
+port: 7890
+socks-port: 7891
+mixed-port: 7892
+allow-lan: false
+mode: rule
+log-level: info
+external-controller: 127.0.0.1:9090 
+dns:
+  enable: true
+  listen: 127.0.0.1:5450
+  ipv6: true
+  default-nameserver: 
+    - 8.8.8.8
+    - 223.5.5.5
+    - 119.29.29.29
+    - 1.2.4.8
+    - 114.114.114.114
+    - 1.1.1.1
+    - 112.215.208.254
+    - 112.215.209.254
+    - 216.239.32.21
+  enhanced-mode: fake-ip
+  fake-ip-range: 216.239.32.0/19
+  nameserver: 
+    - 223.5.5.5
+    - 119.29.29.29
+    - 1.2.4.8
+    - 114.114.114.114
+    - 1.1.1.1
+    - 112.215.208.254
+    - 112.215.209.254
+    - 216.239.32.21
+    - 8.8.8.8
+    - dns.adguard.com
+    - https://dns.google/dns-query
+    - https://dns64.dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    - https://dns64.cloudflare-dns.com/dns-query
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+    - https://doh.opendns.com/dns-query
+    - https://dns.quad9.net/dns-query
+    - https://dns.adguard.com/dns-query
+    - https://doh.familyshield.opendns.com/dns-query
+    - https://dns-nyc.aaflalo.me/dns-query
+    - https://doh.in.ahadns.net/dns-query
+    - https://dns.aa.net.uk/dns-query
+    - https://dnses.alekberg.net/dns-query
+    - https://doh.42l.fr/dns-query
+    - https://doh-jp.blahdns.com/dns-query
+    - https://free.bravedns.com/dns-query
+    - https://protected.canadianshield.cira.ca/dns-query
+    - https://doh.li/dns-query
+    - https://doh.applied-privacy.net/query
+    - https://ordns.he.net/dns-query
+    - https://jp.tiar.app/dns-query
+    - https://doh.libredns.gr/dns-query
+    - https://dns.moulticast.net/dns-query
+    - https://doh.pi-dns.com/dns-query
+    - https://dns.rubyfish.cn/dns-query
+    - https://ibksturm.synology.me/dns-query
+    - tls://216.239.32.21:853
+    - tls://1.2.4.8:853
+    - tls://114.114.114.114:853
+    - tls://223.5.5.5:853
+    - tls://112.215.208.254:853
+    - tls://112.215.209.254:853
+  fallback: 
+    - tcp://216.239.32.21:53
+    - tcp://1.2.4.8:53
+    - tcp://114.114.114.114:53
+    - tcp://223.5.5.5:53
+    - tcp://112.215.208.254:53
+    - tcp://112.215.209.254:53
+  fallback-filter: 
+  geoip: true
+  ipcidr: 
+    - 216.239.32.0/19
+  domain:
+    - googleapis.com
+    - googleapis.cn
+proxies:
+ - {"name":"Trojan","type":"trojan","server":"sg1.vless.co","port":443,"password":"fastssh.com","udp":true,"skip-cert-verify":true,"sni":"cdn.codmwest.com"}
+ - {"name":"Vmess","type":"vmess","server":"sg1-v2ray.proxylite-vpn.me","port":443,"uuid":"7d97ea51-2639-4a18-8f88-90dd6ee4be5b","alterId":64,"cipher":"auto","udp":true,"tls":true,"skip-cert-verify":true,"servername":"cdn.codmwest.com","network":"ws","ws-path":"/proxylite","ws-headers":{"Host":"sg1-v2ray.proxylite-vpn.me"}}
+ - {"name":"Ssr","type":"ssr","server":"sg6-socks.jagoanssh.com","port":8388,"cipher":"aes-256-cfb","password":"R3gz6WXbNz","protocol":"auth_chain_a","protocol-param":"","obfs":"tls1.2_ticket_auth","obfs-param":"www.codmwest.com"}
+ - {"name":"Ss","type":"ss","server":"ss.sg.sshmax.net","port":1443,"cipher":"chacha20-ietf-poly1305","password":"7vUWYuYaBQdi","udp":true,"plugin":"obfs","plugin-opts":{"mode":"tls","host":"cdn.codmwest.com"}}
+proxy-groups:
+-
+  name: Proxy
+  type: select
+  proxies:
+    - Trojan
+    - Vmess
+    - Ssr
+    - Ss
+-
+  name: Rule
+  type: select
+  proxies:
+    - Proxy
+rules:
+- GEOIP,ID,Rule
+- MATCH,Proxy
